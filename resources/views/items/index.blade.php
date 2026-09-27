@@ -125,10 +125,6 @@
 
     <form action="{{ route('items.store') }}" method="POST">
       @csrf
-      <div class="form-group">
-        <label class="form-label">SKU Barang (Unik)</label>
-        <input type="text" name="sku" class="form-control font-mono" placeholder="Contoh: MAT-SMN-002" required>
-      </div>
 
       <div class="form-group">
         <label class="form-label">Nama Barang</label>
@@ -184,7 +180,9 @@
       @method('PUT')
       <div class="form-group">
         <label class="form-label">SKU Barang</label>
-        <input type="text" id="edit_sku" name="sku" class="form-control font-mono" required>
+        <input type="text" id="edit_sku" class="form-control font-mono" readonly
+          style="background-color: var(--bg); color: var(--text-secondary); cursor: not-allowed;">
+        <small style="color: var(--text-secondary); font-size: 11.5px;">SKU tidak dapat diubah setelah dibuat.</small>
       </div>
 
       <div class="form-group">

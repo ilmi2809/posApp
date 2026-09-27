@@ -45,18 +45,26 @@ class ItemController extends Controller
         return view('items.index', compact('items', 'uoms'));
     }
 
+    /**
+     * Generate SKU otomatis: ITM-00001, ITM-00002, dst.
+     */
+    private function generateSku(): string
+    {
+        $last = Item::orderByDesc('id')->lockForUpdate()->first();
+        $nextNumber = $last ? ($last->id + 1) : 1;
+
+        return 'ITM-'.str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
-            'sku' => ['required', 'string', 'max:100', 'unique:items,sku'],
             'name' => ['required', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:100'],
             'uom_id' => ['required', 'exists:uoms,id'],
             'selling_price' => ['required', 'numeric', 'min:0'],
             'initial_stock' => ['nullable', 'numeric', 'min:0'],
         ], [
-            'sku.required' => 'SKU wajib diisi.',
-            'sku.unique' => 'SKU sudah digunakan oleh item lain.',
             'name.required' => 'Nama item wajib diisi.',
             'uom_id.required' => 'Satuan (UoM) wajib dipilih.',
             'selling_price.required' => 'Harga jual wajib diisi.',
@@ -65,8 +73,10 @@ class ItemController extends Controller
 
         try {
             DB::transaction(function () use ($request) {
+                $sku = $this->generateSku();
+
                 $item = Item::create([
-                    'sku' => strtoupper($request->input('sku')),
+                    'sku' => $sku,
                     'name' => $request->input('name'),
                     'category' => $request->input('category'),
                     'uom_id' => $request->input('uom_id'),
@@ -106,7 +116,6 @@ class ItemController extends Controller
     public function update(Request $request, Item $item)
     {
         $request->validate([
-            'sku' => ['required', 'string', 'max:100', 'unique:items,sku,'.$item->id],
             'name' => ['required', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:100'],
             'uom_id' => ['required', 'exists:uoms,id'],
@@ -115,8 +124,8 @@ class ItemController extends Controller
 
         try {
             DB::transaction(function () use ($request, $item) {
+                // SKU bersifat immutable — tidak bisa diubah setelah dibuat
                 $item->update([
-                    'sku' => strtoupper($request->input('sku')),
                     'name' => $request->input('name'),
                     'category' => $request->input('category'),
                     'uom_id' => $request->input('uom_id'),
