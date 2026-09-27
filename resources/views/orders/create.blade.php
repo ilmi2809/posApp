@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Tambah Order Baru - Toko Material A')
-@section('page-header', 'Kasir — Tambah Order Penjualan')
+@section('page-header', 'Tambah Order Penjualan')
 
 @section('content')
 <div style="margin-bottom: 14px;">

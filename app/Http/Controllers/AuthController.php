@@ -54,9 +54,9 @@ class AuthController extends Controller
     public function redirectBasedOnRole($user)
     {
         if ($user->hasRole('Kasir')) {
-            return redirect()->route('orders.create');
+            return redirect()->route('orders.index');
         } elseif ($user->hasRole('Admin Stock')) {
-            return redirect()->route('stocks.index');
+            return redirect()->route('items.index');
         } else {
             return redirect()->route('dashboard');
         }
