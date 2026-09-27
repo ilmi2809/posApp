@@ -8,9 +8,12 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
+  <!-- Overlay (mobile only) -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
   <div class="app-container">
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <div>
           <a href="{{ route('dashboard') }}" class="sidebar-brand">TOKO MATERIAL A</a>
@@ -123,6 +126,13 @@
     <!-- Main Content -->
     <div class="main-wrapper">
       <header class="topbar">
+        <button class="burger-btn" id="burgerBtn" onclick="toggleSidebar()" aria-label="Toggle Menu">
+          <div class="burger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
         <div class="topbar-title">@yield('page-header', 'Dashboard')</div>
         <div class="topbar-actions">
           <span style="color: var(--text-secondary); font-size: 13px;">📅 {{ date('d F Y') }}</span>
@@ -160,5 +170,24 @@
   </div>
 
   @stack('scripts')
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('sidebar-open');
+      overlay.classList.toggle('active');
+    }
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('sidebar-open');
+      document.getElementById('sidebarOverlay').classList.remove('active');
+    }
+    // Tutup sidebar otomatis saat klik link di mobile
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      link.addEventListener('click', function() {
+        if (window.innerWidth <= 768) closeSidebar();
+      });
+    });
+  </script>
 </body>
 </html>
