@@ -12,6 +12,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             return $this->redirectBasedOnRole(Auth::user());
         }
+
         return view('auth.login');
     }
 
@@ -32,6 +33,7 @@ class AuthController extends Controller
             session()->forget('url.intended');
 
             $user = Auth::user();
+
             return $this->redirectBasedOnRole($user);
         }
 

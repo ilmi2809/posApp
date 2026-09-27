@@ -4,14 +4,13 @@ namespace App\Services;
 
 use App\Models\Order;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class InvoiceService
 {
     private static array $romanMonths = [
         1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV',
         5 => 'V', 6 => 'VI', 7 => 'VII', 8 => 'VIII',
-        9 => 'IX', 10 => 'X', 11 => 'XI', 12 => 'XII'
+        9 => 'IX', 10 => 'X', 11 => 'XI', 12 => 'XII',
     ];
 
     public function generateInvoiceNumber(?Carbon $date = null): string
@@ -28,9 +27,9 @@ class InvoiceService
             ->whereMonth('created_at', $date->month)
             ->count();
 
-        $sequence = str_pad((string)($count + 1), 3, '0', STR_PAD_LEFT);
+        $sequence = str_pad((string) ($count + 1), 3, '0', STR_PAD_LEFT);
 
-        $invoiceNumber = $prefix . $sequence;
+        $invoiceNumber = $prefix.$sequence;
 
         // Ensure uniqueness in case of race conditions
         $existing = Order::where('invoice_number', $invoiceNumber)->exists();
@@ -38,8 +37,8 @@ class InvoiceService
             $maxId = Order::whereYear('created_at', $year)
                 ->whereMonth('created_at', $date->month)
                 ->max('id');
-            $sequence = str_pad((string)($maxId + 1), 3, '0', STR_PAD_LEFT);
-            $invoiceNumber = $prefix . $sequence;
+            $sequence = str_pad((string) ($maxId + 1), 3, '0', STR_PAD_LEFT);
+            $invoiceNumber = $prefix.$sequence;
         }
 
         return $invoiceNumber;

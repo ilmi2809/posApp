@@ -6,9 +6,9 @@ use App\Models\Item;
 use App\Models\Order;
 use App\Models\PaymentMethod;
 use App\Services\OrderService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Exception;
 
 class OrderController extends Controller
 {
@@ -44,7 +44,7 @@ class OrderController extends Controller
         try {
             $order = $this->orderService->createOrder(
                 itemsArray: $request->input('items'),
-                paymentMethodId: (int)$request->input('payment_method_id'),
+                paymentMethodId: (int) $request->input('payment_method_id'),
                 userId: Auth::id()
             );
 
@@ -78,7 +78,7 @@ class OrderController extends Controller
             ->latest();
 
         // If Kasir, show their own transactions unless they have full permission
-        if (Auth::user()->hasRole('Kasir') && !Auth::user()->can('user.view')) {
+        if (Auth::user()->hasRole('Kasir') && ! Auth::user()->can('user.view')) {
             $query->where('user_id', Auth::id());
         }
 
@@ -86,9 +86,9 @@ class OrderController extends Controller
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('invoice_number', 'like', "%{$search}%")
-                  ->orWhereHas('user', function ($u) use ($search) {
-                      $u->where('name', 'like', "%{$search}%");
-                  });
+                    ->orWhereHas('user', function ($u) use ($search) {
+                        $u->where('name', 'like', "%{$search}%");
+                    });
             });
         }
 
@@ -103,13 +103,13 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        $order->load(['user', 'paymentMethod', 'orderDetails.item.uom']);
-        return view('orders.show', compact('order'));
+        return redirect()->route('orders.receipt', $order->id);
     }
 
     public function receipt(Order $order)
     {
         $order->load(['user', 'paymentMethod', 'orderDetails.item.uom']);
+
         return view('orders.receipt', compact('order'));
     }
 }

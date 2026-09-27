@@ -1,22 +1,35 @@
 @extends('layouts.app')
 
-@section('title', 'Master Item - Toko Material A')
-@section('page-header', 'Master Data — Master Item Barang')
+@section('title', 'Kelola Barang & Stok - Toko Material A')
+@section('page-header', 'Kelola Barang & Stok')
 
 @section('content')
 <div class="card">
   <div class="card-header">
-    <div class="card-title">Daftar Item Barang</div>
+    <div class="card-title">Daftar Barang & Stok</div>
+    @can('item.create')
     <button onclick="document.getElementById('createItemModal').style.display='block'" class="btn btn-primary">
       + Tambah Item Baru
     </button>
+    @endcan
   </div>
 
   <form action="{{ route('items.index') }}" method="GET" style="margin-bottom: 20px;">
-    <div style="display: flex; gap: 12px;">
-      <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Cari SKU, Nama Item, Kategori...">
-      <button type="submit" class="btn btn-secondary">Cari</button>
-      @if(request('search'))
+    <div style="display: flex; gap: 12px; align-items: flex-end;">
+      <div style="flex: 1;">
+        <label for="search" class="form-label">Cari SKU / Nama Barang / Kategori</label>
+        <input type="text" name="search" id="search" value="{{ request('search') }}" class="form-control" placeholder="Cari SKU, Nama Barang, Kategori...">
+      </div>
+      <div style="width: 200px;">
+        <label for="status" class="form-label">Status Stok</label>
+        <select name="status" id="status" class="form-select">
+          <option value="">Semua Status</option>
+          <option value="empty" {{ request('status') === 'empty' ? 'selected' : '' }}>Stok Habis (0)</option>
+          <option value="low" {{ request('status') === 'low' ? 'selected' : '' }}>Stok Menipis (1-10)</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-secondary">Filter</button>
+      @if(request()->hasAny(['search', 'status']))
         <a href="{{ route('items.index') }}" class="btn btn-secondary">Reset</a>
       @endif
     </div>
@@ -31,12 +44,16 @@
           <th>Kategori</th>
           <th>Satuan (UoM)</th>
           <th style="text-align: right;">Harga Jual</th>
-          <th style="text-align: right;">Stok</th>
+          <th style="text-align: right;">Stok saat Ini</th>
+          <th>Status Stok</th>
           <th style="text-align: center;">Aksi</th>
         </tr>
       </thead>
       <tbody>
         @forelse($items as $item)
+        @php
+          $qty = $item->stock->quantity ?? 0;
+        @endphp
         <tr>
           <td class="font-mono font-weight-bold">{{ $item->sku }}</td>
           <td style="font-weight: 600;">{{ $item->name }}</td>
@@ -45,26 +62,46 @@
           <td style="text-align: right;" class="font-mono font-weight-bold">
             Rp {{ number_format($item->price->selling_price ?? 0, 0, ',', '.') }}
           </td>
-          <td style="text-align: right;" class="font-mono">
-            {{ number_format($item->stock->quantity ?? 0, 0) }}
+          <td style="text-align: right;" class="font-mono font-weight-bold">
+            {{ number_format($qty, 0) }}
+          </td>
+          <td>
+            @if($qty <= 0)
+              <span class="badge badge-danger">Stok Habis</span>
+            @elseif($qty <= 10)
+              <span class="badge badge-warning">Stok Menipis</span>
+            @else
+              <span class="badge badge-success">Stok Normal</span>
+            @endif
           </td>
           <td style="text-align: center;">
-            <button 
-              onclick="openEditModal({{ json_encode($item) }}, {{ $item->price->selling_price ?? 0 }})" 
-              class="btn btn-secondary btn-sm"
-            >
-              Edit
-            </button>
-            <form action="{{ route('items.destroy', $item->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Yakin ingin menghapus item ini?')">
-              @csrf
-              @method('DELETE')
-              <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-            </form>
+            <div style="display: flex; gap: 6px; justify-content: center;">
+              @can('stock.add')
+              <a href="{{ route('stocks.add', $item->id) }}" class="btn btn-primary btn-sm" title="Input Stok Masuk">
+                + Stok
+              </a>
+              @endcan
+              @if(auth()->user()->can('item.update') || auth()->user()->can('item.edit'))
+              <button 
+                onclick="openEditModal({{ json_encode($item) }}, {{ $item->price->selling_price ?? 0 }})" 
+                class="btn btn-secondary btn-sm"
+              >
+                Edit
+              </button>
+              @endif
+              @can('item.delete')
+              <form action="{{ route('items.destroy', $item->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Yakin ingin menghapus item ini?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+              </form>
+              @endcan
+            </div>
           </td>
         </tr>
         @empty
         <tr>
-          <td colspan="7" style="text-align: center; color: var(--text-secondary); padding: 30px;">
+          <td colspan="8" style="text-align: center; color: var(--text-secondary); padding: 30px;">
             Belum ada item barang.
           </td>
         </tr>

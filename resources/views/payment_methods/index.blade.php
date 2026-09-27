@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Metode Pembayaran - Toko Material A')
-@section('page-header', 'Master Data — Master Metode Pembayaran')
+@section('title', 'Kelola Metode Pembayaran - Toko Material A')
+@section('page-header', 'Kelola Metode Pembayaran')
 
 @section('content')
 <div class="grid grid-cols-3">

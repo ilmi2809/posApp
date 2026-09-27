@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Master User - Toko Material A')
-@section('page-header', 'Superadmin — Kelola Master User & Akun')
+@section('title', 'Kelola User - Toko Material A')
+@section('page-header', 'Kelola User')
 
 @section('content')
 <div class="card">
   <div class="card-header">
-    <div class="card-title">Daftar Pengguna Sistem</div>
+    <div class="card-title">Daftar User</div>
     <button onclick="document.getElementById('createUserModal').style.display='block'" class="btn btn-primary">
-      + Tambah User Baru
+      + Tambah User
     </button>
   </div>
 

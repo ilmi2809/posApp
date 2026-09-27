@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Stock;
 use App\Models\StockMovement;
 use Illuminate\Support\Facades\DB;
-use ValidationException;
 
 class StockService
 {
@@ -21,14 +20,14 @@ class StockService
         return DB::transaction(function () use ($itemId, $quantity, $userId, $note) {
             $stock = Stock::where('item_id', $itemId)->lockForUpdate()->first();
 
-            if (!$stock) {
+            if (! $stock) {
                 $stock = Stock::create([
                     'item_id' => $itemId,
                     'quantity' => 0,
                 ]);
             }
 
-            $stockBefore = (float)$stock->quantity;
+            $stockBefore = (float) $stock->quantity;
             $stockAfter = $stockBefore + $quantity;
 
             $stock->quantity = $stockAfter;
@@ -58,12 +57,12 @@ class StockService
 
         $stock = Stock::where('item_id', $itemId)->lockForUpdate()->first();
 
-        if (!$stock || $stock->quantity < $quantity) {
+        if (! $stock || $stock->quantity < $quantity) {
             $available = $stock ? $stock->quantity : 0;
             throw new \Exception("Stok barang tidak mencukupi. Stok tersedia: {$available}, diminta: {$quantity}.");
         }
 
-        $stockBefore = (float)$stock->quantity;
+        $stockBefore = (float) $stock->quantity;
         $stockAfter = $stockBefore - $quantity;
 
         if ($stockAfter < 0) {
@@ -81,7 +80,7 @@ class StockService
             'quantity' => $quantity,
             'stock_before' => $stockBefore,
             'stock_after' => $stockAfter,
-            'note' => $note ?? 'Pengurangan stok dari transaksi order #' . $orderId,
+            'note' => $note ?? 'Pengurangan stok dari transaksi order #'.$orderId,
         ]);
     }
 }

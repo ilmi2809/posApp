@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('title', 'Input Stok Masuk - Toko Material A')
-@section('page-header', 'Admin Stock — Input Stok Masuk')
+@section('page-header', 'Kelola Stok')
 
 @section('content')
 <div style="max-width: 600px; margin: 0 auto;">
   <div class="card">
     <div class="card-header">
       <div class="card-title">Tambah Stok Masuk (Stock In)</div>
-      <a href="{{ route('stocks.index') }}" class="btn btn-secondary btn-sm">← Batal</a>
+      <a href="{{ route('items.index') }}" class="btn btn-secondary btn-sm">← Batal</a>
     </div>
 
     <!-- Item Information Summary -->
@@ -57,13 +57,13 @@
           id="note" 
           rows="3" 
           class="form-control" 
-          placeholder="Contoh: Penerimaan dari Supplier PT Semen Gresik Surat Jalan SJ-99182"
+          placeholder="Catatan / Referensi"
         ></textarea>
       </div>
 
       <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
         <a href="{{ route('stocks.index') }}" class="btn btn-secondary">Batal</a>
-        <button type="submit" class="btn btn-primary">➕ Simpan Stok Masuk</button>
+        <button type="submit" class="btn btn-primary">Simpan Stok Masuk</button>
       </div>
     </form>
   </div>

@@ -7,10 +7,10 @@ use App\Models\Price;
 use App\Models\Stock;
 use App\Models\StockMovement;
 use App\Models\Uom;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Exception;
 
 class ItemController extends Controller
 {
@@ -22,21 +22,27 @@ class ItemController extends Controller
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('sku', 'like', "%{$search}%")
-                  ->orWhere('category', 'like', "%{$search}%");
+                    ->orWhere('sku', 'like', "%{$search}%")
+                    ->orWhere('category', 'like', "%{$search}%");
             });
+        }
+
+        if ($request->filled('status')) {
+            if ($request->status === 'empty') {
+                $query->whereHas('stock', function ($q) {
+                    $q->where('quantity', '<=', 0);
+                });
+            } elseif ($request->status === 'low') {
+                $query->whereHas('stock', function ($q) {
+                    $q->where('quantity', '>', 0)->where('quantity', '<=', 10);
+                });
+            }
         }
 
         $items = $query->paginate(15)->withQueryString();
         $uoms = Uom::all();
 
         return view('items.index', compact('items', 'uoms'));
-    }
-
-    public function create()
-    {
-        $uoms = Uom::all();
-        return view('items.create', compact('uoms'));
     }
 
     public function store(Request $request)
@@ -71,7 +77,7 @@ class ItemController extends Controller
                     'selling_price' => $request->input('selling_price'),
                 ]);
 
-                $initialStock = (float)($request->input('initial_stock') ?? 0);
+                $initialStock = (float) ($request->input('initial_stock') ?? 0);
                 Stock::create([
                     'item_id' => $item->id,
                     'quantity' => $initialStock,
@@ -93,21 +99,14 @@ class ItemController extends Controller
             return redirect()->route('items.index')
                 ->with('success', 'Master Item baru berhasil ditambahkan.');
         } catch (Exception $e) {
-            return back()->withInput()->with('error', 'Gagal menambah item: ' . $e->getMessage());
+            return back()->withInput()->with('error', 'Gagal menambah item: '.$e->getMessage());
         }
-    }
-
-    public function edit(Item $item)
-    {
-        $item->load(['uom', 'price', 'stock']);
-        $uoms = Uom::all();
-        return view('items.edit', compact('item', 'uoms'));
     }
 
     public function update(Request $request, Item $item)
     {
         $request->validate([
-            'sku' => ['required', 'string', 'max:100', 'unique:items,sku,' . $item->id],
+            'sku' => ['required', 'string', 'max:100', 'unique:items,sku,'.$item->id],
             'name' => ['required', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:100'],
             'uom_id' => ['required', 'exists:uoms,id'],
@@ -124,7 +123,7 @@ class ItemController extends Controller
                 ]);
 
                 $currentPrice = $item->price;
-                if (!$currentPrice || (float)$currentPrice->selling_price !== (float)$request->input('selling_price')) {
+                if (! $currentPrice || (float) $currentPrice->selling_price !== (float) $request->input('selling_price')) {
                     Price::create([
                         'item_id' => $item->id,
                         'selling_price' => $request->input('selling_price'),
@@ -143,6 +142,7 @@ class ItemController extends Controller
     {
         try {
             $item->delete();
+
             return redirect()->route('items.index')
                 ->with('success', 'Item berhasil dihapus.');
         } catch (Exception $e) {

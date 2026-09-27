@@ -17,8 +17,8 @@ class UserController extends Controller
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('username', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('username', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
@@ -58,8 +58,8 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:100', 'unique:users,username,' . $user->id],
-            'email' => ['nullable', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'username' => ['required', 'string', 'max:100', 'unique:users,username,'.$user->id],
+            'email' => ['nullable', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'password' => ['nullable', 'string', 'min:6'],
             'role' => ['required', 'exists:roles,name'],
         ]);
@@ -88,6 +88,7 @@ class UserController extends Controller
         }
 
         $user->delete();
+
         return redirect()->route('users.index')
             ->with('success', 'Pengguna berhasil dihapus.');
     }

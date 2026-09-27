@@ -7,7 +7,6 @@ use App\Models\Order;
 use App\Models\Stock;
 use App\Models\StockMovement;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -25,15 +24,15 @@ class DashboardController extends Controller
 
         // Superadmin Executive Dashboard
         $today = Carbon::today();
-        
+
         $totalSalesToday = Order::whereDate('transaction_date', $today)->sum('total');
         $totalOrdersToday = Order::whereDate('transaction_date', $today)->count();
         $totalItems = Item::count();
-        
+
         $lowStockItems = Stock::with(['item.uom'])
             ->where('quantity', '<=', 10)
             ->get();
-            
+
         $recentOrders = Order::with(['user', 'paymentMethod'])
             ->latest()
             ->take(5)

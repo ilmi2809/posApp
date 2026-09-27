@@ -48,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('stocks.movements');
 
     // Master Items
-    Route::resource('items', ItemController::class)->middleware('can:item.view');
+    Route::resource('items', ItemController::class)->except(['create', 'show', 'edit'])->middleware('can:item.view');
 
     // Master UoM
     Route::resource('uoms', UomController::class)->except(['create', 'show', 'edit'])->middleware('can:uom.view');

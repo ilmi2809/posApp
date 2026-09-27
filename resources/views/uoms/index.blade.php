@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Master Satuan (UoM) - Toko Material A')
-@section('page-header', 'Master Data — Master Satuan Unit (UoM)')
+@section('title', 'Kelola Satuan (Uom) - Toko Material A')
+@section('page-header', 'Kelola Satuan (Uom)')
 
 @section('content')
 <div class="grid grid-cols-3">

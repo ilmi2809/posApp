@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Atur Privilege - ' . $role->name)
-@section('page-header', 'Superadmin — Pengaturan Privilege Role: ' . $role->name)
+@section('page-header', 'Pengaturan Privilege Role: ' . $role->name)
 
 @section('content')
 <div style="max-width: 900px; margin: 0 auto;">

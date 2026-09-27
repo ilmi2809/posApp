@@ -5,13 +5,9 @@ namespace Tests\Feature;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\PaymentMethod;
-use App\Models\Price;
 use App\Models\Stock;
-use App\Models\Uom;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class PosSystemTest extends TestCase
@@ -19,9 +15,13 @@ class PosSystemTest extends TestCase
     use RefreshDatabase;
 
     protected User $superadmin;
+
     protected User $kasir;
+
     protected User $adminStock;
+
     protected Item $item;
+
     protected PaymentMethod $cashMethod;
 
     protected function setUp(): void
@@ -99,8 +99,8 @@ class PosSystemTest extends TestCase
                 [
                     'item_id' => $this->item->id,
                     'qty' => $qtyToBuy,
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $expectedSubtotal = $price * $qtyToBuy;
@@ -135,8 +135,8 @@ class PosSystemTest extends TestCase
                 [
                     'item_id' => $this->item->id,
                     'qty' => $excessiveQty,
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $response->assertSessionHas('error');

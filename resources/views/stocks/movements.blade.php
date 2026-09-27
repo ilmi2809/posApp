@@ -1,13 +1,10 @@
 @extends('layouts.app')
 
 @section('title', 'Riwayat Mutasi Stok - Toko Material A')
-@section('page-header', 'Admin Stock — Riwayat Pergerakan Stok')
+@section('page-header', 'Riwayat Mutasi Stok')
 
 @section('content')
 <div class="card">
-  <div class="card-header">
-    <div class="card-title">Audit Trail Pergerakan Stok (In / Out)</div>
-  </div>
 
   <form action="{{ route('stocks.movements') }}" method="GET" style="margin-bottom: 20px;">
     <div style="display: flex; gap: 12px; align-items: flex-end;">

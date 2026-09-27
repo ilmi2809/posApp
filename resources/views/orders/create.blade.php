@@ -1,9 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Buat Order POS - Toko Material A')
-@section('page-header', 'Kasir — Buat Order Penjualan')
+@section('title', 'Tambah Order Baru - Toko Material A')
+@section('page-header', 'Kasir — Tambah Order Penjualan')
 
 @section('content')
+<div style="margin-bottom: 14px;">
+  <a href="{{ route('orders.index') }}" class="btn btn-secondary btn-sm">← Kembali ke Data Transaksi</a>
+</div>
 <div class="pos-container">
   <!-- Left Side: Items Catalog & Search -->
   <div>

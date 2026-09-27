@@ -13,6 +13,7 @@ class RoleController extends Controller
         $roles = Role::with('permissions')->get();
         $allPermissions = Permission::all()->groupBy(function ($perm) {
             $parts = explode('.', $perm->name);
+
             return $parts[0] ?? 'general';
         });
 
@@ -40,6 +41,7 @@ class RoleController extends Controller
     {
         $allPermissions = Permission::all()->groupBy(function ($perm) {
             $parts = explode('.', $perm->name);
+
             return $parts[0] ?? 'general';
         });
 
@@ -49,7 +51,7 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:100', 'unique:roles,name,' . $role->id],
+            'name' => ['required', 'string', 'max:100', 'unique:roles,name,'.$role->id],
             'permissions' => ['nullable', 'array'],
             'permissions.*' => ['exists:permissions,name'],
         ]);
@@ -70,6 +72,7 @@ class RoleController extends Controller
         }
 
         $role->delete();
+
         return redirect()->route('roles.index')
             ->with('success', 'Role berhasil dihapus.');
     }

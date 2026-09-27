@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'POS Toko Material A')</title>
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+  <link rel="stylesheet" href="/css/style.css">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
@@ -22,73 +22,45 @@
         @can('dashboard.view')
         <li>
           <a href="{{ route('dashboard') }}" class="sidebar-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-            📊 Dashboard
+            Dashboard
           </a>
         </li>
         @endcan
 
         <!-- TRANSAKSI POS -->
         @if(auth()->user()->can('order.create') || auth()->user()->can('order.view'))
-        <li class="sidebar-group-title">Penjualan</li>
-        @can('order.create')
         <li>
-          <a href="{{ route('orders.create') }}" class="sidebar-link {{ request()->routeIs('orders.create') ? 'active' : '' }}">
-            🛒 Buat Order POS
+          <a href="{{ route('orders.index') }}" class="sidebar-link {{ request()->routeIs('orders.*') ? 'active' : '' }}">
+            Transaksi Penjualan
           </a>
         </li>
-        @endcan
-        @can('order.view')
-        <li>
-          <a href="{{ route('orders.index') }}" class="sidebar-link {{ request()->routeIs('orders.index') || request()->routeIs('orders.show') || request()->routeIs('orders.receipt') ? 'active' : '' }}">
-            📋 Riwayat Transaksi
-          </a>
-        </li>
-        @endcan
         @endif
 
         <!-- STOK & GUDANG -->
-        @if(auth()->user()->can('stock.view') || auth()->user()->can('stock.history'))
-        <li class="sidebar-group-title">Inventory & Stok</li>
-        @can('stock.view')
+        @if(auth()->user()->can('item.view') || auth()->user()->can('stock.view') || auth()->user()->can('stock.history'))
+        @if(auth()->user()->can('item.view') || auth()->user()->can('stock.view'))
         <li>
-          <a href="{{ route('stocks.index') }}" class="sidebar-link {{ request()->routeIs('stocks.index') || request()->routeIs('stocks.add') ? 'active' : '' }}">
-            📦 Master Stok Barang
+          <a href="{{ route('items.index') }}" class="sidebar-link {{ request()->routeIs('items.*') || request()->routeIs('stocks.index') || request()->routeIs('stocks.add') ? 'active' : '' }}">
+            Kelola Barang & Stok
           </a>
         </li>
-        @endcan
+        @endif
         @can('stock.history')
         <li>
           <a href="{{ route('stocks.movements') }}" class="sidebar-link {{ request()->routeIs('stocks.movements') ? 'active' : '' }}">
-            🔄 Riwayat Mutasi Stok
+            Riwayat Mutasi Stok
           </a>
         </li>
         @endcan
         @endif
 
         <!-- MASTER DATA -->
-        @if(auth()->user()->can('item.view') || auth()->user()->can('user.view') || auth()->user()->can('role.view') || auth()->user()->can('uom.view') || auth()->user()->can('price.view') || auth()->user()->can('payment_method.view'))
-        <li class="sidebar-group-title">Master Data</li>
-
-        @can('item.view')
-        <li>
-          <a href="{{ route('items.index') }}" class="sidebar-link {{ request()->routeIs('items.*') ? 'active' : '' }}">
-            🏷️ Master Item
-          </a>
-        </li>
-        @endcan
-
-        @can('price.view')
-        <li>
-          <a href="{{ route('prices.index') }}" class="sidebar-link {{ request()->routeIs('prices.*') ? 'active' : '' }}">
-            💲 Master Harga Jual
-          </a>
-        </li>
-        @endcan
+        @if(auth()->user()->can('user.view') || auth()->user()->can('role.view') || auth()->user()->can('uom.view') || auth()->user()->can('payment_method.view'))
 
         @can('uom.view')
         <li>
           <a href="{{ route('uoms.index') }}" class="sidebar-link {{ request()->routeIs('uoms.*') ? 'active' : '' }}">
-            📏 Master Satuan (UoM)
+            Kelola UoM
           </a>
         </li>
         @endcan
@@ -96,7 +68,7 @@
         @can('payment_method.view')
         <li>
           <a href="{{ route('payment-methods.index') }}" class="sidebar-link {{ request()->routeIs('payment-methods.*') ? 'active' : '' }}">
-            💳 Metode Pembayaran
+            Kelola Metode Pembayaran
           </a>
         </li>
         @endcan
@@ -104,7 +76,7 @@
         @can('user.view')
         <li>
           <a href="{{ route('users.index') }}" class="sidebar-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
-            👤 Master User
+            Kelola User
           </a>
         </li>
         @endcan
@@ -112,7 +84,7 @@
         @can('role.view')
         <li>
           <a href="{{ route('roles.index') }}" class="sidebar-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
-            🔑 Role & Hak Akses
+            Kelola Role
           </a>
         </li>
         @endcan
@@ -120,18 +92,17 @@
 
         <!-- LAPORAN / REPORT -->
         @if(auth()->user()->can('report.sales') || auth()->user()->can('report.stock'))
-        <li class="sidebar-group-title">Laporan</li>
         @can('report.sales')
         <li>
           <a href="{{ route('reports.sales') }}" class="sidebar-link {{ request()->routeIs('reports.sales') ? 'active' : '' }}">
-            📈 Laporan Penjualan
+            Laporan Penjualan
           </a>
         </li>
         @endcan
         @can('report.stock')
         <li>
           <a href="{{ route('reports.stock') }}" class="sidebar-link {{ request()->routeIs('reports.stock') ? 'active' : '' }}">
-            📉 Laporan Stok Barang
+            Laporan Stok Barang
           </a>
         </li>
         @endcan

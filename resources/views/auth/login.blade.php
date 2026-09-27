@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Toko Material A</title>
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+  <link rel="stylesheet" href="/css/style.css">
   <style>
     body {
       background-color: var(--bg);
@@ -101,25 +101,10 @@
         >
       </div>
 
-      <div style="margin-bottom: 20px;">
-        <label style="font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
-          <input type="checkbox" name="remember"> Ingat saya
-        </label>
-      </div>
-
       <button type="submit" class="btn btn-primary btn-block" style="padding: 10px;">
-        Masuk Ke Sistem
+        Masuk
       </button>
     </form>
-
-    <div class="demo-users">
-      <strong>Kredensial Akun Demo (Password: <span class="font-mono">password</span>):</strong>
-      <div style="margin-top: 6px;">
-        • Superadmin: <span class="demo-user-badge">superadmin</span><br>
-        • Admin Stock: <span class="demo-user-badge">adminstock</span><br>
-        • Kasir: <span class="demo-user-badge">kasir</span>
-      </div>
-    </div>
   </div>
 </body>
 </html>

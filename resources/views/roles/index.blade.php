@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Master Role & Privilege - Toko Material A')
-@section('page-header', 'Superadmin — Master Role & Management Privilege (RBAC)')
+@section('title', 'Kelola Role & Privilege - Toko Material A')
+@section('page-header', 'Kelola Role & Privilege')
 
 @section('content')
 <div class="card">
   <div class="card-header">
-    <div class="card-title">Daftar Role & Matrix Privilege</div>
+    <div class="card-title">Daftar Role & Privilege</div>
     <button onclick="document.getElementById('createRoleModal').style.display='block'" class="btn btn-primary">
-      + Tambah Role Baru
+      + Tambah Role
     </button>
   </div>
 
@@ -46,7 +46,7 @@
             </div>
           </td>
           <td style="text-align: center; width: 140px;">
-            <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-primary btn-sm">⚙️ Atur Privilege</a>
+            <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-primary btn-sm">Atur Privilege</a>
           </td>
         </tr>
         @endforeach

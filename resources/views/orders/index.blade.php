@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Riwayat Transaksi - Toko Material A')
-@section('page-header', 'Riwayat Transaksi Penjualan')
+@section('title', 'Transaksi Penjualan - Toko Material A')
+@section('page-header', 'Transaksi Penjualan')
 
 @section('content')
 <div class="card">
   <div class="card-header">
-    <div class="card-title">Daftar Transaksi</div>
+    <div class="card-title">Data Transaksi Penjualan</div>
     @can('order.create')
-    <a href="{{ route('orders.create') }}" class="btn btn-primary">+ Order Baru</a>
+    <a href="{{ route('orders.create') }}" class="btn btn-primary">+ Tambah Order Baru</a>
     @endcan
   </div>
 

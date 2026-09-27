@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Dashboard - Toko Material A')
-@section('page-header', 'Dashboard Eksekutif')
+@section('page-header', 'Dashboard')
 
 @section('content')
 <div class="grid grid-cols-4" style="margin-bottom: 24px;">
@@ -20,14 +20,14 @@
   </div>
 
   <div class="card" style="margin-bottom: 0;">
-    <div style="font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">Total Master Item</div>
+    <div style="font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">Total Item</div>
     <div style="font-size: 22px; font-weight: 700; color: var(--text-primary); margin-top: 6px;" class="font-mono">
       {{ $totalItems }} Item
     </div>
   </div>
 
   <div class="card" style="margin-bottom: 0;">
-    <div style="font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">Peringatan Stok Menipis</div>
+    <div style="font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">Stok Menipis</div>
     <div style="font-size: 22px; font-weight: 700; color: {{ count($lowStockItems) > 0 ? 'var(--warning)' : 'var(--success)' }}; margin-top: 6px;" class="font-mono">
       {{ count($lowStockItems) }} Item
     </div>
@@ -38,8 +38,8 @@
   <!-- Peringatan Stok -->
   <div class="card">
     <div class="card-header">
-      <div class="card-title">⚠️ Item Dengan Stok Menipis (≤ 10)</div>
-      <a href="{{ route('stocks.index') }}" class="btn btn-secondary btn-sm">Kelola Stok</a>
+      <div class="card-title">Item Stok Kurang dari 10</div>
+      <a href="{{ route('items.index') }}" class="btn btn-secondary btn-sm">Kelola Stok</a>
     </div>
 
     <div class="table-responsive">

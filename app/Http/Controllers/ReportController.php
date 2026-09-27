@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
 use App\Models\OrderDetail;
 use App\Models\Stock;
 use Carbon\Carbon;
@@ -12,7 +11,7 @@ class ReportController extends Controller
 {
     public function sales(Request $request)
     {
-        $startDate = $request->input('start_date') 
+        $startDate = $request->input('start_date')
             ? Carbon::createFromFormat('Y-m-d', $request->input('start_date'))->startOfDay()
             : Carbon::now()->startOfMonth();
 
@@ -33,8 +32,8 @@ class ReportController extends Controller
 
     public function stock(Request $request)
     {
-        $date = $request->input('date') 
-            ? Carbon::createFromFormat('Y-m-d', $request->input('date')) 
+        $date = $request->input('date')
+            ? Carbon::createFromFormat('Y-m-d', $request->input('date'))
             : Carbon::today();
 
         $stocks = Stock::with(['item.uom', 'item.price'])

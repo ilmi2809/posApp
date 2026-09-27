@@ -42,7 +42,7 @@ Aplikasi Web Point of Sale (POS) & Inventory Management System yang dibangun ber
 ## 🛠️ Technology Stack
 
 - **Backend**: Laravel 11 / PHP 8.5
-- **Database**: SQLite / MySQL (PDO Driver)
+- **Database**: MySQL
 - **Auth & RBAC**: Laravel Auth + Spatie Laravel-Permission
 - **Frontend**: Blade + Vanilla CSS Design System (Flat Solid, High Contrast, Desktop-First)
 - **Testing Framework**: PHPUnit / Laravel Feature Tests

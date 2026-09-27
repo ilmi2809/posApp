@@ -10,6 +10,7 @@ class UomController extends Controller
     public function index()
     {
         $uoms = Uom::withCount('items')->get();
+
         return view('uoms.index', compact('uoms'));
     }
 
@@ -28,7 +29,7 @@ class UomController extends Controller
     public function update(Request $request, Uom $uom)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:100', 'unique:uoms,name,' . $uom->id],
+            'name' => ['required', 'string', 'max:100', 'unique:uoms,name,'.$uom->id],
             'symbol' => ['nullable', 'string', 'max:20'],
         ]);
 
@@ -44,6 +45,7 @@ class UomController extends Controller
         }
 
         $uom->delete();
+
         return redirect()->route('uoms.index')->with('success', 'UoM berhasil dihapus.');
     }
 }

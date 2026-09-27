@@ -6,8 +6,8 @@ use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
@@ -19,10 +19,8 @@ class OrderService
     /**
      * Create order atomically with database transaction & stock validation
      *
-     * @param array $itemsArray Array of ['item_id' => int, 'qty' => float]
-     * @param int $paymentMethodId
-     * @param int $userId
-     * @return Order
+     * @param  array  $itemsArray  Array of ['item_id' => int, 'qty' => float]
+     *
      * @throws Exception
      */
     public function createOrder(array $itemsArray, int $paymentMethodId, int $userId): Order
@@ -37,8 +35,8 @@ class OrderService
 
             // 1. Validate items, prices, and pre-calculate subtotal
             foreach ($itemsArray as $entry) {
-                $itemId = (int)$entry['item_id'];
-                $qty = (float)$entry['qty'];
+                $itemId = (int) $entry['item_id'];
+                $qty = (float) $entry['qty'];
 
                 if ($qty <= 0) {
                     throw new Exception('Jumlah item harus lebih besar dari 0.');
@@ -46,16 +44,16 @@ class OrderService
 
                 $item = Item::with(['price', 'stock'])->find($itemId);
 
-                if (!$item) {
+                if (! $item) {
                     throw new Exception("Item ID {$itemId} tidak ditemukan.");
                 }
 
                 $priceObj = $item->price;
-                if (!$priceObj) {
+                if (! $priceObj) {
                     throw new Exception("Item '{$item->name}' belum memiliki harga jual.");
                 }
 
-                $price = (float)$priceObj->selling_price;
+                $price = (float) $priceObj->selling_price;
                 $itemSubtotal = round($price * $qty, 2);
                 $subtotal += $itemSubtotal;
 

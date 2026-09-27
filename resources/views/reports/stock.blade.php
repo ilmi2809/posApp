@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('title', 'Laporan Stok Barang - Toko Material A')
-@section('page-header', 'Laporan Stok Barang (Stock Report)')
+@section('page-header', 'Laporan Stok Barang')
 
 @section('content')
 <div class="card">
   <div class="card-header">
-    <div class="card-title">b) Stock — Filter Otomatis Hari Ini ({{ $date->format('d/m/Y') }})</div>
-    <button onclick="window.print()" class="btn btn-secondary btn-sm no-print">🖨️ Cetak Laporan</button>
+    <div class="card-title">Laporan Stok Barang Hari Ini ({{ $date->format('d/m/Y') }})</div>
+    <button onclick="window.print()" class="btn btn-secondary btn-sm no-print">Cetak Laporan</button>
   </div>
 
   <div class="table-responsive">

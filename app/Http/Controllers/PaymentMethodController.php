@@ -10,6 +10,7 @@ class PaymentMethodController extends Controller
     public function index()
     {
         $methods = PaymentMethod::withCount('orders')->get();
+
         return view('payment_methods.index', compact('methods'));
     }
 
@@ -27,7 +28,7 @@ class PaymentMethodController extends Controller
     public function update(Request $request, PaymentMethod $paymentMethod)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:100', 'unique:payment_methods,name,' . $paymentMethod->id],
+            'name' => ['required', 'string', 'max:100', 'unique:payment_methods,name,'.$paymentMethod->id],
         ]);
 
         $paymentMethod->update($request->only('name'));
@@ -42,6 +43,7 @@ class PaymentMethodController extends Controller
         }
 
         $paymentMethod->delete();
+
         return redirect()->route('payment-methods.index')->with('success', 'Metode Pembayaran berhasil dihapus.');
     }
 }
