@@ -1,9 +1,7 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.3-cli-alpine
 
-# Install system dependencies & PHP extensions
-RUN apk add --no-linux-headers --no-cache \
-    nginx \
-    supervisor \
+# Install system dependencies, PHP extensions, Node.js & SQLite
+RUN apk add --no-cache \
     curl \
     git \
     libpng-dev \
@@ -12,7 +10,11 @@ RUN apk add --no-linux-headers --no-cache \
     unzip \
     oniguruma-dev \
     icu-dev \
-    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd intl opcache
+    nodejs \
+    npm \
+    sqlite \
+    sqlite-dev \
+    && docker-php-ext-install pdo pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd intl opcache
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -26,9 +28,17 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Install NPM & Build Vite Assets
+RUN npm install && npm run build
 
-EXPOSE 80
+# Ensure SQLite database file exists
+RUN touch /var/www/html/database/database.sqlite
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
+# Fix Permissions
+RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+
+ENV PORT=10000
+EXPOSE 10000
+
+# Run migrations, seeders, and start Laravel app
+CMD php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=${PORT}
